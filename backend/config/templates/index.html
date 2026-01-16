@@ -1,0 +1,212 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VGLuxeBeauty | Cosmetica y Belleza</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap"  rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <main>
+    
+    {% include 'partials/header.html' %} 
+
+    <!-- Sección de Noticias Destacadas -->
+    <section class="noticias">
+        <div class="TituloNoticias">
+            <h2>Noticias Destacadas</h2>
+            <p>Descubre las últimas novedades y tendencias en el mundo de la belleza con nuestras noticias destacadas.</p>
+        </div>
+        <div class="slider-container">
+            <input type="radio" name="slider" id="slide1" checked>
+            <input type="radio" name="slider" id="slide2">
+            <input type="radio" name="slider" id="slide3">
+            <ul class="slider-track">
+                <li><img class="slider-item" src="{% static 'img/noticia1.jpg' %}" alt="Noticia 1"></li>
+                <li><img class="slider-item" src="{% static 'img/noticia2.jpg' %}" alt="Noticia 2"></li>
+                <li><img class="slider-item" src="{% static 'img/noticia3.jpg' %}" alt="Noticia 3"></li>  
+            </ul>
+            <div class="slider-dots">
+                <label for="slide1" class="dot"></label>
+                <label for="slide2" class="dot"></label>
+                <label for="slide3" class="dot"></label>    
+            </div>
+        </div>
+    </section>
+
+    <!-- sección de Productos Destacados -->
+    <section class="productos-destacados">
+        <div class="texto-productos">
+        <h2>Productos Destacados</h2>
+        <a href="productos.html" class="ver-todos">Ver Todos</a>
+        </div>
+
+        <div class="carousel-wrapper">
+            <button class="carousel-btn prev">&#10094;</button>
+
+        <ul class="productos-container">
+            <!-- productos dinamicos -->
+            {% for producto in productos %}
+            <li class="producto">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" onerror="this.onerror=null; this.src='/static/img/perfume1.png';">
+                {% else %}
+                    <img src="{% static 'img/perfume1.png' %}" alt="{{ producto.nombre }}">
+                {% endif %}
+                <h3>{{ producto.nombre }}</h3>
+                <p>{{ producto.descripcion|truncatewords:10 }}</p>
+                <p><strong>${{ producto.precio }}</strong></p>
+            </li>
+            {% empty %}
+            <li class="producto">
+                <img src="{% static 'img/perfume1.png' %}" alt="Producto 1">
+                <h3>No hay productos disponibles</h3>
+                <p>Pronto agregaremos nuevos productos.</p>
+            </li>
+            {% endfor %}
+        </ul>
+        <button class="carousel-btn next">&#10095;</button>
+        </div>
+    </section>
+
+    {% include 'partials/footer.html' %}
+        <script>
+            //Sincronizar dots con scroll manual
+            const sliderTrack = document.querySelector('.slider-track');
+            const radioButtons = document.querySelectorAll('input[name="slider"]');
+
+            //Cuando se hace clic en un dot
+            radioButtons.forEach((radio, index) => {
+                radio.addEventListener('change', () => {
+                    const slideWidth = sliderTrack.offsetWidth;
+                    sliderTrack.scrollLeft = slideWidth * index;
+                })
+            });
+
+            //Actualizar dots al hacer scroll manual
+            sliderTrack.addEventListener('scroll', () => {
+                const slideWidth = sliderTrack.offsetWidth;
+                const currentSlide = Math.round(sliderTrack.scrollLeft / slideWidth);
+                if (radioButtons[currentSlide]) {
+                    radioButtons[currentSlide].checked = true;
+                    
+                }
+            });
+
+            // Drag to scroll con mouse (para navegadores de escritorio)
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            sliderTrack.addEventListener('mousedown', (e) => {
+                isDown = true;
+                sliderTrack.style.cursor = 'grabbing';
+                startX = e.pageX - sliderTrack.offsetLeft;
+                scrollLeft = sliderTrack.scrollLeft;
+                e.preventDefault();
+            });
+
+            sliderTrack.addEventListener('mouseleave', () => {
+                isDown = false;
+                sliderTrack.style.cursor = 'grab';
+            });
+
+            sliderTrack.addEventListener('mouseup', () => {
+                isDown = false;
+                sliderTrack.style.cursor = 'grab';
+            });
+
+            sliderTrack.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - sliderTrack.offsetLeft;
+                const walk = (x - startX) * 2;
+                sliderTrack.scrollLeft = scrollLeft - walk;
+            });
+            </script>
+            <script>
+                const container = document.querySelector('.productos-container');
+                const prevBtn = document.querySelector('.carousel-btn.prev');
+                const nextBtn = document.querySelector('.carousel-btn.next');
+                
+                const scrollAmount = 250;
+
+                nextBtn.addEventListener('click', () => {
+                    container.scrollBy({
+                        left: scrollAmount,
+                        behavior: 'smooth'
+                    });
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    container.scrollBy({
+                        left: -scrollAmount,
+                        behavior: 'smooth'
+                    });
+                });
+            </script>
+            <!-- Script para conectar con django -->     
+            <script> 
+            const API_URL = 'http://127.0.0.1:8000/api/productos/';
+
+            fetch(API_URL)
+                .then(response => {
+                    if (!response.ok) throw new Error('API no disponible');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Datos recibidos:', data);
+                    const productos = Array.isArray(data) ? data : (data.results || []);
+                    const contenedor = document.querySelector(".productos-container");
+                    contenedor.innerHTML = "";
+
+                    if (productos.length === 0) {
+                        contenedor.innerHTML = "<li class='producto'><p>No hay productos disponibles.</p></li>";
+                        return;
+                    }
+
+                    productos.forEach(producto => {
+                        const item = document.createElement('li');
+                        item.classList.add('producto');
+                        
+                        item.innerHTML = `
+                        <a href="/producto/${producto.id}/" style="text-decoration:none; color:inherit;">
+                            <img src="${producto.imagen}" alt="${producto.nombre}" onerror="this.onerror=null; this.src='/static/img/perfume1.png';">
+                            <h3>${producto.nombre}</h3>
+                            <p>$${producto.precio.toLocaleString("es-CL")}</p>
+                            </a>
+                            <button class="btn-carrito" onclick="agregarCarrito(${producto.id})">
+                                Agregar al Carrito
+                            </button>
+                        `;
+                        contenedor.appendChild(item);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al obtener los productos:', error);
+                    // Si falla el fetch, mantener los productos renderizados por Django
+                });
+
+                function agregarCarrito(id) {
+                    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                    const existente = carrito.find(item => item.producto_id === id);
+                    
+                    if (existente) {
+                        existente.cantidad += 1;
+                    } else {
+                        carrito.push({ producto_id: id, cantidad: 1 });
+                    }
+
+                    localStorage.setItem("carrito", JSON.stringify(carrito));
+                    alert("Producto agregado al carrito");
+                }
+            </script>
+    </main>
+</body>
+</html>
