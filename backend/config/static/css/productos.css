@@ -1,0 +1,295 @@
+.productos-page {
+    padding: 40px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.productos-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.productos-header h1 {
+    font-family: 'Dancing Script';
+    font-size: 48px;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.productos-header p {
+    color: #666;
+    font-size: 18px;
+}
+
+/* Filtros y Ordenamiento */
+.filtros-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.filtros-categorias {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.filtro-btn {
+    padding: 8px 16px;
+    background-color: white;
+    border: 2px solid var(--secondary-color);
+    border-radius: 20px;
+    color: var(--accent-color);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.filtro-btn:hover,
+.filtro-btn.activo {
+    background-color: var(--secondary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.ordenar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ordenar-container label {
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.ordenar-select {
+    padding: 8px 12px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 5px;
+    background-color: white;
+    color: var(--accent-color);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Grid de Productos */
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.producto-card {
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.producto-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.producto-imagen {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+}
+
+.producto-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.producto-card:hover .producto-imagen img {
+    transform: scale(1.1);
+}
+
+.producto-info {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.producto-categoria {
+    font-size: 12px;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.producto-nombre {
+    font-family: 'Dancing Script';
+    font-size: 24px;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    min-height: 60px;
+}
+
+.producto-descripcion {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    
+    -webkit-box-orient: vertical;
+}
+
+.producto-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.producto-precio {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.btn-ver-detalle {
+    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-ver-detalle:hover {
+    background-color: var(--accent-color);
+}
+
+/* Stock Badge */
+.stock-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(58, 32, 82, 0.9);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.stock-bajo {
+    background-color: rgba(255, 152, 0, 0.9);
+}
+
+.sin-stock {
+    background-color: rgba(244, 67, 54, 0.9);
+}
+
+/* Paginación */
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.paginacion a,
+.paginacion span {
+    padding: 10px 15px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 5px;
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.paginacion a:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.paginacion .actual {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.paginacion .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Sin resultados */
+.sin-resultados {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.sin-resultados i {
+    font-size: 80px;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.sin-resultados h3 {
+    font-family: 'Dancing Script';
+    font-size: 32px;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.sin-resultados p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .productos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    
+    .filtros-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .ordenar-container {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .productos-header h1 {
+        font-size: 36px;
+    }
+}

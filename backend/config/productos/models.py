@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -16,3 +17,53 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+class Resena(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='resenas')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    calificacion = models.IntegerField(choices=[(i, i) for i in range(1, 6)]) #1 a 5 estrellas
+    comentario = models.TextField()
+    fecha = models.DateTimeField(auto_now_add=True)
+    aprobada = models.BooleanField(default=False) #Requiere aprobacion del admin
+
+    class Meta:
+        ordering = ['-fecha']
+        verbose_name = 'Reseña'
+        verbose_name_plural = 'Reseñas'
+    
+    def __str__(self):
+        return f'{self.usuario.username} - {self.producto.nombre} - ({self.calificacion} ★ )'
+    
+    def estrellas_html(self):
+        estrellas_llenas = '★' * self.calificacion
+        estrellas_vacias = '☆' * (5 - self.calificacion)
+        return estrellas_llenas + estrellas_vacias
+
+class Testimonio(models.Model):
+    nombre = models.CharField(max_length=100)
+    imagen = models.ImageField(upload_to="testimonios/", null=True, blank=True)
+    comentario = models.TextField()
+    red_social = models.CharField(max_length=50, choices=[
+        ('Instagram', 'Instagram'),
+        ('Facebook', 'Facebook'),
+        ('Twitter', 'Twitter'),
+        ('TikTok', 'TikTok'),
+        ('otro', 'Otro'),
+    ], default='Instagram')
+    calificacion = models.IntegerField(choices=[(i, i) for i in range(1, 6)], default=5) #1 a 5 estrellas
+    fecha = models.DateTimeField(auto_now_add=True)
+    destacado = models.BooleanField(default=False) #Para mostrar en la pagina principal
+    activo = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-fecha']
+        verbose_name = 'Testimonio'
+        verbose_name_plural = 'Testimonios'
+
+    def __str__(self):
+        return f'{self.nombre} - ({self.red_social}) ({self.calificacion} ★ )'
+    
+    def estrellas_html(self):
+        estrellas_llenas = '★' * self.calificacion
+        estrellas_vacias = '☆' * (5 - self.calificacion)
+        return estrellas_llenas + estrellas_vacias

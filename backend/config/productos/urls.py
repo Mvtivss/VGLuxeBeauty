@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import ProductoListView
-from .views import producto_detalle
+from . import views
 
 
 urlpatterns = [
-    path ("productos/", ProductoListView.as_view(), name="productos"),
-    path ("producto/<int:id>/", producto_detalle, name="producto_detalle"),
+    path ('', views.home , name="home"),
+    path ("productos/", views.productos , name="productos"),
+    path ("producto/<int:id>/", views.producto_detalle, name="producto_detalle"),
 ]

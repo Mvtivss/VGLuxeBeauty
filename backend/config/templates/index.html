@@ -74,6 +74,56 @@
         <button class="carousel-btn next">&#10095;</button>
         </div>
     </section>
+    <!-- Sección de Testimonios-->
+     <section class="seccion-testimonios">
+        <h2>Lo que dicen nuestros clientes</h2>
+
+
+        <div class="testimonios-container">
+            {% if testimonios %}
+                {% for testimonio in testimonios %}
+                <div class="testimonio-card">
+                    <div class="testimonio-header">
+                    {% if testimonio.imagen %}
+                        <img src="{{ testimonio.imagen.url }}" alt="{{ testimonio.nombre }}" class="testimonio-avatar">
+                    {% else %}
+                        <div class="testimonio-avatar-placeholder" >
+                            {{ testimonio.nombre|first|upper }}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="testimonio-info">
+                        <div class="testimonio-nombre">{{ testimonio.nombre }}</div>
+                        <div class="testimonio-red-social">
+                            {% if testimonio.red_social == 'Instagram' %}
+                                <i class="bi bi-instagram"></i> Instagram
+                            {% elif testimonio.red_social == 'Facebook' %}
+                                <i class="bi bi-facebook"></i> Facebook
+                            {% elif testimonio.red_social == 'Twitter' %}
+                                <i class="bi bi-twitter"></i> Twitter
+                            {% elif testimonio.red_social == 'TikTok' %}
+                                <i class="bi bi-tiktok"></i> TikTok
+                            {% else %}
+                                <i class="bi bi-chat-dots"></i> Otro
+                            {% endif %}   
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonio-estrellas">{{ testimonio.estrellas_html }}</div>
+
+            <p class="testimonio-comentario">"{{ testimonio.comentario }}"</p>
+
+            <div class="testimonio-fecha">{{ testimonio.fecha|date:"d F Y" }}</div>
+        </div>
+        {% endfor %}
+        {% else %}
+            <p style="text-align: center; color: #999; margin: 30px 0;">No hay testimonios disponibles.</p>
+        {% endif %}
+    </div>
+    </section>
+    
+                            
 
     {% include 'partials/footer.html' %}
         <script>

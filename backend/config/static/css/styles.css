@@ -104,16 +104,6 @@ ul li:last-child {
     scale: 110%;
 }
 
-footer {
-    background-color: var(--secondary-color);
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    text-align: start;
-    padding: 15px;
-    margin-top: 5px;
-    font-family: var(--font-body);
-}
 
 .buscador {
     margin: 0;
@@ -177,4 +167,15 @@ footer {
     font-family: var(--font-body);
     font-size: 12px;
     cursor: pointer;
+}
+
+footer {
+    background-color: var(--secondary-color);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    text-align: start;
+    padding: 15px;
+    margin-top: 5px;
+    font-family: var(--font-body);
 }

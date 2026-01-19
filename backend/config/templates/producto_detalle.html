@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ producto.nombre }} | VGLuxeBeauty</title>
+    <link rel="stylesheet" href="{% static 'css/producto_detalle.css' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap"  rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -15,11 +16,13 @@
 
 <main style="padding:40px; display:flex; gap:40px;">
 
-    <div style="flex:1;">
+    <section class="seccion-producto">
+
+    <div style="flex:1;" class="producto-imagen">
         <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" style="width:100%; max-width:400px;">
     </div>
 
-    <div style="flex:1;">
+    <div style="flex:1;" class="producto-detalle">
         <h2>{{ producto.nombre }}</h2>
         <p style="font-size:20px; font-weight:bold;">
             ${{ producto.precio }}
@@ -31,10 +34,50 @@
             Agregar al carrito
         </button>
     </div>
+    </section>
+    <!---Seccion reseñas  -->
+    <section class="seccion-resenas">
+        <h2>Reseñas de Clientes</h2>
 
-    {% include 'partials/footer.html' %}
+        <div class="promedio-calificacion">
+            <div class="numero"> {{ promedio_calificacion|default:"0.0" }}</div>
+            <div class="estrellas">
+                {% if promedio_calificacion > 0 %}
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= promedio_calificacion %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                {% else %}
+                    ☆☆☆☆☆
+                {% endif %}
+            </div>
+            <div class="total">Basado en {{ total_resenas }} reseñas {{ total_resenas|pluralize }}</div>
+        </div>
 
+        {% if resenas %}
+            {% for resena in resenas %}
+                <div class="resena">
+                    <div class="resena-header">
+                        <div class="avatar">{{resena.usuario.username|first|upper}}</div>
+                        <span class="nombre"> {{ resena.usuario.get_full_name|default:resena.usuario.username }} </span>
+                        </div>
+                        <span class="resena-fecha">{{ resena.fecha|date:"d F Y" }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <p style ="text-align: center; color: #999; margin: 30px 0;">No hay reseñas disponibles.</p>
+        {% endif %}
+        
+        {% if user.is_authenticated %}
+            <button class="btn-escribir-resena">Escribir una Reseña</button>
+        {% else %}
+            <p style="text-align:center; margin-top:30px 0;">
+                <a href="{% url 'login' %}" style="color: var(--accent-color)">Inicia sesión</a> para escribir una reseña.
+            </p>
+        {% endif %}
+    </section>
 </main>
+
+{% include 'partials/footer.html' %}
 
 <script>
 function agregarCarrito(id) {
