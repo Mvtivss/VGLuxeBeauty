@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido #{{ pedido.numero_pedido }} | VGLuxeBeauty</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    {% include 'partials/header.html' %}
+    
+    <div class="container" style="max-width: 900px; margin: 40px auto;">
+        <h1><i class="bi bi-receipt-cutoff"></i> Pedido #{{ pedido.numero_pedido }}</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Estado del Pedido</h5>
+                <span class="badge badge-{{ pedido.estado }}">{{ pedido.get_estado_display }}</span>
+                <p class="mt-2">Realizado el {{ pedido.creado|date:"d/m/Y H:i" }}</p>
+                
+                {% if pedido.estado in 'pendiente,pagado' %}
+                <form method="post" action="{% url 'cancelar_pedido' pedido.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger" 
+                            onclick="return confirm('¿Estás seguro de cancelar este pedido?')">
+                        <i class="bi bi-x-circle"></i> Cancelar Pedido
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5><i class="bi bi-geo-alt-fill"></i> Dirección de Envío</h5>
+                        <p>
+                            <strong>{{ pedido.nombre_completo }}</strong><br>
+                            {{ pedido.direccion }}<br>
+                            {{ pedido.ciudad }}, {{ pedido.estado }} {{ pedido.codigo_postal }}<br>
+                            {{ pedido.pais }}<br>
+                            <i class="bi bi-telephone-fill"></i> {{ pedido.telefono }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5><i class="bi bi-credit-card-fill"></i> Información de Pago</h5>
+                        <p>
+                            <strong>Método:</strong> {{ pedido.get_metodo_pago_display }}<br>
+                            {% if pedido.referencia_pago %}
+                            <strong>Referencia:</strong> {{ pedido.referencia_pago }}<br>
+                            {% endif %}
+                            <strong>Estado:</strong> {{ pedido.get_estado_display }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5><i class="bi bi-box-seam"></i> Productos</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in pedido.items.all %}
+                        <tr>
+                            <td>{{ item.nombre_producto }}</td>
+                            <td>${{ item.precio_unitario }}</td>
+                            <td>{{ item.cantidad }}</td>
+                            <td>${{ item.subtotal }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+                            <td>${{ pedido.subtotal }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Envío:</strong></td>
+                            <td>${{ pedido.costo_envio }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                            <td><strong>${{ pedido.total }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        
+        <a href="{% url 'mis_pedidos' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a Mis Pedidos
+        </a>
+    </div>
+    
+    {% include 'partials/footer.html' %}
+</body>
+</html>

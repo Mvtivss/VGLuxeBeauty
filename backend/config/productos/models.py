@@ -67,3 +67,44 @@ class Testimonio(models.Model):
         estrellas_llenas = '★' * self.calificacion
         estrellas_vacias = '☆' * (5 - self.calificacion)
         return estrellas_llenas + estrellas_vacias
+
+class Carrito(models.Model):
+        usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+        session_key = models.CharField(max_length=40, null=True, blank=True)
+        creado = models.DateTimeField(auto_now_add=True)
+        actualizado = models.DateTimeField(auto_now=True)
+
+        class Meta:
+            verbose_name = 'Carrito'
+            verbose_name_plural = 'Carritos'
+
+        def __str__(self):
+            if self.usuario:
+                return f'Carrito de {self.usuario.username}'
+            return f'Carrito {self.id}'
+        
+        @property
+        def total_items(self):
+            return sum(item.cantidad for item in self.items.all())
+        
+        @property
+        def total_precio(self):
+            return sum(item.subtotal for item in self.items.all())
+        
+class ItemCarrito(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, related_name='items')
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
+    fecha_agregado = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Item de Carrito'
+        verbose_name_plural = 'Items de Carrito'
+        unique_together = ('carrito', 'producto')
+
+    def __str__(self):
+        return f'{self.cantidad} x {self.producto.nombre}'
+    
+    @property
+    def subtotal(self):
+        return self.producto.precio * self.cantidad

@@ -1,0 +1,352 @@
+/* ===========================
+   PÁGINA NOSOTROS - ESTILOS
+   =========================== */
+
+.nosotros-page {
+    min-height: 100vh;
+}
+
+.contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section */
+.hero-nosotros {
+    background: linear-gradient(to bottom, #b594d3, #3a2052);
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.9;
+}
+
+/* Sección Historia */
+.seccion-historia {
+    padding: 80px 20px;
+    background-color: #fff;
+}
+
+.historia-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.historia-imagen img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.historia-texto h2 {
+    font-size: 2.5rem;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.historia-texto p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Misión, Visión y Valores */
+.seccion-mision-vision {
+    padding: 80px 20px;
+    background-color: #f8f9fa;
+}
+
+.mvv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.mvv-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mvv-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.mvv-icono {
+    font-size: 3rem;
+    color: #b594d3;
+    margin-bottom: 20px;
+}
+
+.mvv-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.mvv-card p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #666;
+}
+
+.valores-lista {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.valores-lista li {
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #666;
+}
+
+.valores-lista i {
+    color: #b594d3;
+    margin-right: 10px;
+}
+
+/* Por Qué Elegirnos */
+.seccion-porque-elegirnos {
+    padding: 80px 20px;
+    background-color: #fff;
+}
+
+.seccion-porque-elegirnos h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: #333;
+}
+
+.caracteristicas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.caracteristica-card {
+    text-align: center;
+    padding: 30px 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.caracteristica-card:hover {
+    transform: translateY(-5px);
+}
+
+.caracteristica-icono {
+    font-size: 3rem;
+    color: #b594d3;
+    margin-bottom: 20px;
+}
+
+.caracteristica-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.caracteristica-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Nuestro Equipo */
+.seccion-equipo {
+    padding: 80px 20px;
+    background-color: #f8f9fa;
+}
+
+.seccion-equipo h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.equipo-intro {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 50px;
+}
+
+.equipo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+}
+
+.miembro-card {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.miembro-card:hover {
+    transform: translateY(-5px);
+}
+
+.miembro-foto {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #b594d3;
+}
+
+.miembro-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.miembro-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.miembro-cargo {
+    font-size: 0.95rem;
+    color: #b594d3;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.miembro-bio {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Estadísticas */
+.seccion-estadisticas {
+    padding: 60px 20px;
+    background: linear-gradient(to bottom, #b594d3, #3a2052);
+    color: white;
+}
+
+.estadisticas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+}
+
+.estadistica-item {
+    text-align: center;
+}
+
+.estadistica-numero {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.estadistica-label {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Call to Action */
+.seccion-cta {
+    padding: 80px 20px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.seccion-cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.seccion-cta p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.btn-cta {
+    display: inline-block;
+    padding: 15px 40px;
+    background: linear-gradient(to bottom, #b594d3, #3a2052);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(181, 148, 211, 0.4);
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .historia-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mvv-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .caracteristicas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .equipo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .estadisticas-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .historia-texto h2,
+    .seccion-porque-elegirnos h2,
+    .seccion-equipo h2,
+    .seccion-cta h2 {
+        font-size: 2rem;
+    }
+}

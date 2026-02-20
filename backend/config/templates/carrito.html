@@ -1,0 +1,240 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras | VGLuxeBeauty</title>
+    <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+</head>
+<body>
+    {% include 'partials/header.html' %}
+    
+    <main class="carrito-page">
+        <div class="container">
+            <h1><i class="bi bi-cart3"></i> Mi Carrito</h1>
+            
+            {% if items %}
+            <div class="carrito-contenido">
+                <div class="items-lista">
+                    {% for item in items %}
+                    <div class="carrito-item" data-item-id="{{ item.id }}">
+                        <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}">
+                        <div class="item-info">
+                            <h3>{{ item.producto.nombre }}</h3>
+                            <p class="item-categoria">{{ item.producto.categoria }}</p>
+                            <p class="item-precio">${{ item.producto.precio }}</p>
+                        </div>
+                        <div class="item-cantidad">
+                            <button class="btn-cantidad btn-decrementar" data-item-id="{{ item.id }}">-</button>
+                            <input type="number" value="{{ item.cantidad }}" min="1" max="{{ item.producto.stock }}" 
+                                   data-item-id="{{ item.id }}" class="cantidad-input">
+                            <button class="btn-cantidad btn-incrementar" data-item-id="{{ item.id }}">+</button>
+                        </div>
+                        <p class="item-subtotal">${{ item.subtotal }}</p>
+                        <button class="btn-eliminar" data-item-id="{{ item.id }}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="carrito-resumen">
+                    <h2>Resumen del Pedido</h2>
+                    <div class="resumen-linea">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">${{ total }}</span>
+                    </div>
+                    <div class="resumen-linea">
+                        <span>Envío:</span>
+                        <span>A calcular</span>
+                    </div>
+                    <div class="resumen-total">
+                        <span>Total:</span>
+                        <span id="total">${{ total }}</span>
+                    </div>
+                    {% if user.is_authenticated %}
+<a href="{% url 'checkout' %}" class="btn-finalizar">Proceder al Pago</a>
+{% else %}
+<a href="{% url 'login' %}?next={% url 'checkout' %}" class="btn-finalizar">
+    Iniciar Sesión para Continuar
+</a>
+{% endif %}
+                    <a href="{% url 'productos' %}" class="btn-seguir">Seguir Comprando</a>
+                    <button id="btn-vaciar-carrito" class="btn-vaciar">Vaciar Carrito</button>
+                </div>
+            </div>
+            {% else %}
+            <div class="carrito-vacio">
+                <i class="bi bi-cart-x"></i>
+                <h2>Tu carrito está vacío</h2>
+                <p>¡Agrega productos para comenzar!</p>
+                <a href="{% url 'productos' %}" class="btn-productos">Ver Productos</a>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+    
+    <div id="notification-container" class="notification-container"></div>
+
+
+    {% include 'partials/footer.html' %}
+
+    <script src="{% static 'js/notifications.js' %}"></script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        const csrftoken = getCookie('csrftoken');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const pendingMessage = sessionStorage.getItem('cartToastMessage');
+            const pendingType = sessionStorage.getItem('cartToastType');
+            if (pendingMessage && window.showNotification) {
+                window.showNotification(pendingMessage, pendingType || 'success');
+                sessionStorage.removeItem('cartToastMessage');
+                sessionStorage.removeItem('cartToastType');
+            }
+        });
+        
+        // Event listeners usando delegación de eventos
+        document.addEventListener('DOMContentLoaded', function() {
+            // Botones de incrementar
+            document.querySelectorAll('.btn-incrementar').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = this.dataset.itemId;
+                    cambiarCantidad(itemId, 1);
+                });
+            });
+            
+            // Botones de decrementar
+            document.querySelectorAll('.btn-decrementar').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = this.dataset.itemId;
+                    cambiarCantidad(itemId, -1);
+                });
+            });
+            
+            // Inputs de cantidad
+            document.querySelectorAll('.cantidad-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const itemId = this.dataset.itemId;
+                    actualizarCantidad(itemId, this.value);
+                });
+            });
+            
+            // Botones de eliminar
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = this.dataset.itemId;
+                    eliminarItem(itemId);
+                });
+            });
+            
+            // Botón vaciar carrito
+            const btnVaciar = document.getElementById('btn-vaciar-carrito');
+            if (btnVaciar) {
+                btnVaciar.addEventListener('click', vaciarCarrito);
+            }
+        });
+        
+        function cambiarCantidad(itemId, cambio) {
+            const input = document.querySelector(`[data-item-id="${itemId}"].cantidad-input`);
+            const nuevaCantidad = parseInt(input.value) + cambio;
+            if (nuevaCantidad > 0) {
+                actualizarCantidad(itemId, nuevaCantidad);
+            }
+        }
+        
+        function actualizarCantidad(itemId, cantidad) {
+            fetch(`/carrito/actualizar/${itemId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `cantidad=${cantidad}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Ocurrió un error al actualizar el carrito');
+            });
+        }
+        
+        function eliminarItem(itemId) {
+            if (confirm('¿Eliminar este producto del carrito?')) {
+                fetch(`/carrito/eliminar/${itemId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ocurrió un error al eliminar el producto');
+                });
+            }
+        }
+        
+        function vaciarCarrito() {
+            if (confirm('¿Estás seguro de vaciar todo el carrito?')) {
+                fetch('{% url "vaciar_carrito" %}', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(() => {
+                    if (window.showNotification) {
+                        window.showNotification('Carrito vaciado.', 'success');
+                    }
+                    sessionStorage.setItem('cartToastMessage', 'Carrito vaciado.');
+                    sessionStorage.setItem('cartToastType', 'success');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1200);
+                })
+                .catch(() => {
+                    if (window.showError) {
+                        window.showError('No se pudo vaciar el carrito.');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

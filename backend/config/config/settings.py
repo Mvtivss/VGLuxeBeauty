@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'productos',
     'pedidos',
     'pagos',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,24 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 6
 }
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Autenticación
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+# Email Configuration (Consola para desarrollo - cambiar en producción)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Para producción con Gmail:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'tu-email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'tu-contraseña-de-aplicación'
+# DEFAULT_FROM_EMAIL = 'VGLuxeBeauty <tu-email@gmail.com>'

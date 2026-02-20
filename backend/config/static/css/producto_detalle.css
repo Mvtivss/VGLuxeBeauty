@@ -1,160 +1,735 @@
-html, body {
-    height: 100%;
+/* ========================================
+   PÁGINA DE DETALLE DEL PRODUCTO
+   ======================================== */
+
+.producto-detalle-page {
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    min-height: 100vh;
+}
+
+.producto-detalle-page .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ========================================
+   BREADCRUMB
+   ======================================== */
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.breadcrumb a {
+    color: #b594d3;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb a:hover {
+    color: #3a2052;
+}
+
+.breadcrumb span:last-child {
+    color: #333;
+    font-weight: 600;
+}
+
+/* ========================================
+   PRODUCTO PRINCIPAL
+   ======================================== */
+
+.producto-principal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+.producto-imagen-grande {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+
+.producto-imagen-grande img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.producto-imagen-grande:hover img {
+    transform: scale(1.05);
+}
+
+/* ========================================
+   INFO PRINCIPAL
+   ======================================== */
+
+.producto-info-principal {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.categoria-badge {
+    display: inline-block;
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #b594d3 0%, #3a2052 100%);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.producto-info-principal h1 {
+    font-size: 2.5rem;
+    color: #333;
     margin: 0;
 }
 
-body {
+/* ========================================
+   RATING
+   ======================================== */
+
+.producto-rating {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
-main {
-    flex: 1;
+.estrellas {
+    display: flex;
+    gap: 0.25rem;
 }
 
-.seccion-producto {
-    display: flex;  
-    width: 100%;
-    
-  
-  background-color: #d0abf1;
-  border-radius: 10px;
-  padding: 20px;
-  gap: 20px;
+.estrellas i {
+    color: #ffc107;
+    font-size: 1.2rem;
 }
 
-.producto-imagen img {
-    
-    height: auto;
-    border-radius: 10px;
-    margin-right:50px ;
+.rating-numero {
+    color: #666;
+    font-size: 0.95rem;
 }
 
-.producto-detalle {
-    font-family: 'Dancing Script';
-    font-size: 18px;
+.sin-resenas {
+    color: #999;
+    font-style: italic;
+}
+
+/* ========================================
+   PRECIO Y STOCK
+   ======================================== */
+
+.precio-stock {
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 1.5rem 0;
+}
+
+.precio {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #b594d3;
+    margin: 0 0 1rem 0;
+}
+
+.stock {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.stock-disponible {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stock-bajo {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.sin-stock {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ========================================
+   DESCRIPCIÓN
+   ======================================== */
+
+.descripcion h3 {
+    font-size: 1.3rem;
     color: #333;
-    line-height: 1.6;
-    border-left: solid #00000081 1px;
-    padding-left: 20px;
-    margin-right: 40%;
+    margin-bottom: 0.75rem;
 }
 
-.producto-detalle button {
-    background-color: var(--accent-color);
+.descripcion p {
+    color: #666;
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+/* ========================================
+   COMPRAR CONTAINER
+   ======================================== */
+
+.comprar-container {
+    margin-top: 2rem;
+}
+
+/* ========================================
+   SELECTOR DE CANTIDAD
+   ======================================== */
+
+.cantidad-selector {
+    margin-bottom: 1.5rem;
+}
+
+.cantidad-selector label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #333;
+    font-size: 1rem;
+}
+
+.cantidad-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #f5f5f5;
+    padding: 0.5rem;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.cantidad-controls .btn-cantidad {
+    background: #b594d3;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
 }
 
-.producto-detalle button:hover {
-    background-color: #6d597a;
+.cantidad-controls .btn-cantidad:hover {
+    background: #3a2052;
+    transform: scale(1.1);
 }
 
-.seccion-resenas {
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: 30px auto;
-    background-color: #f9f9f9a6;
-    border-radius: 10px;
+.cantidad-controls .btn-cantidad:active {
+    transform: scale(0.95);
 }
-.seccion-resenas h2 {
+
+.cantidad-controls input[type="number"] {
+    width: 70px;
+    height: 45px;
     text-align: center;
-    margin-bottom: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
     color: #333;
+    background: white;
 }
 
-.promedio-calificacion {
-    text-align: center;
-    margin-bottom: 30px;
-}
-    
-
-.promedio-calificacion .numero {
-    font-size: 48px;
-    font-weight: bold;
-    color: var(--accent-color);
+.cantidad-controls input[type="number"]:focus {
+    outline: none;
+    border-color: #b594d3;
 }
 
-.promedio-calificacion .estrellas {
-    color: #f5a623;
-    font-size: 24px;
-}
+/* ========================================
+   BOTONES
+   ======================================== */
 
-.promedio-calificacion .total{
-    color : #666;
-    font-size: 14px;
-}
-
-.resena {
-    background-color: white;
-    padding: 20px;
+.btn-agregar-carrito-grande {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    background: linear-gradient(135deg, #b594d3 0%, #3a2052 100%);
+    color: white;
+    border: none;
     border-radius: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px rgba(181, 148, 211, 0.3);
+}
+
+.btn-agregar-carrito-grande:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(181, 148, 211, 0.4);
+}
+
+.btn-agregar-carrito-grande:active {
+    transform: translateY(0);
+}
+
+.btn-agregar-carrito-grande.disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-agregar-carrito-grande.disabled:hover {
+    transform: none;
+}
+
+.btn-seguir-comprando {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    color: #b594d3;
+    border: 2px solid #b594d3;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-seguir-comprando:hover {
+    background: #b594d3;
+    color: white;
+}
+
+/* ========================================
+   SECCIÓN DE RESEÑAS
+   ======================================== */
+
+.resenas-section {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.resenas-section h2 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #b594d3;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.resenas-lista {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.resena-card {
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.resena-card:hover {
+    background: #f0f0f0;
+    transform: translateX(5px);
 }
 
 .resena-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
 }
 
-.resena-usuario {
+.usuario-info {
     display: flex;
     align-items: center;
-    gap: 10px;
-}
-
-.resena-usuario .avatar {
-    width: 40px;
-    height: 40px;
-    background-color: var(--accent-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: white;
-}
-
-.resena-usuario .nombre {
-    font-weight: bold;
+    gap: 0.5rem;
+    font-weight: 600;
     color: #333;
 }
 
-.resena-estrellas {
-    color: #ffd700;
-    font-size: 18px;
-    margin-bottom: 10px;
+.usuario-info i {
+    font-size: 1.5rem;
+    color: #b594d3;
+}
+
+.resena-rating i {
+    color: #ffc107;
+    font-size: 1rem;
 }
 
 .resena-comentario {
-    color: #555;
-    line-height: 1.5;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
 }
 
-.btn-escribir-resena {
-    display: block;
-    margin: 30px auto;
-    padding: 10px 20px;
-    background-color: var(--accent-color);
+.resena-fecha {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+.sin-resenas-msg {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #999;
+}
+
+.sin-resenas-msg i {
+    font-size: 3rem;
+    color: #ddd;
+    margin-bottom: 1rem;
+}
+
+.sin-resenas-msg p {
+    font-size: 1.1rem;
+}
+
+/* ========================================
+   NOTIFICACIÓN TOAST
+   ======================================== */
+
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 12px, 30px;
-    font-size: 16px;
-    font-family: 'Dancing Script';
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 10000;
+    min-width: 300px;
+    max-width: min(90vw, 380px);
 }
 
-.btn-escribir-resena:hover {
-    background-color: #6d597a;
+.toast-notification.show {
+    transform: translateX(0);
+}
+
+.toast-notification i {
+    font-size: 1.5rem;
+}
+
+.toast-notification span {
+    font-weight: 500;
+    line-height: 1.35;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1200px) {
+    .producto-principal {
+        gap: 2rem;
+    }
+    
+    .producto-imagen-grande img {
+        height: 450px;
+    }
+}
+
+@media (max-width: 992px) {
+    .producto-detalle-page {
+        padding: 1.5rem 0;
+    }
+    
+    .producto-principal {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 1.5rem;
+    }
+
+    .producto-imagen-grande img {
+        height: 400px;
+    }
+
+    .producto-info-principal h1 {
+        font-size: 2rem;
+    }
+
+    .precio {
+        font-size: 2rem;
+    }
+    
+    .resenas-section {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .producto-detalle-page {
+        padding: 1rem 0;
+    }
+    
+    .breadcrumb {
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .producto-principal {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+    
+    .producto-imagen-grande img {
+        height: 320px;
+    }
+    
+    .producto-info-principal h1 {
+        font-size: 1.5rem;
+    }
+    
+    .categoria-badge {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .precio {
+        font-size: 1.8rem;
+    }
+    
+    .descripcion h3 {
+        font-size: 1.1rem;
+    }
+    
+    .descripcion p {
+        font-size: 0.95rem;
+    }
+    
+    .cantidad-controls {
+        gap: 0.75rem;
+    }
+    
+    .cantidad-controls .btn-cantidad {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
+    
+    .cantidad-controls input[type="number"] {
+        width: 60px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    
+    .btn-agregar-carrito-grande {
+        font-size: 1rem;
+        padding: 1rem;
+    }
+    
+    .resenas-section {
+        padding: 1.5rem;
+    }
+
+    .resenas-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .resena-card {
+        padding: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .producto-detalle-page {
+        padding: 0.5rem 0;
+    }
+    
+    .producto-detalle-page .container {
+        padding: 0 0.5rem;
+    }
+    
+    .breadcrumb {
+        font-size: 0.75rem;
+        gap: 0.3rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .producto-principal {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .producto-imagen-grande img {
+        height: 250px;
+    }
+
+    .producto-info-principal h1 {
+        font-size: 1.3rem;
+    }
+    
+    .producto-info-principal {
+        gap: 1rem;
+    }
+    
+    .categoria-badge {
+        font-size: 0.7rem;
+        padding: 0.35rem 0.7rem;
+    }
+    
+    .estrellas i {
+        font-size: 1rem;
+    }
+    
+    .rating-numero {
+        font-size: 0.85rem;
+    }
+
+    .precio {
+        font-size: 1.6rem;
+    }
+    
+    .stock {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .descripcion h3 {
+        font-size: 1rem;
+    }
+    
+    .descripcion p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    
+    .cantidad-selector label {
+        font-size: 0.95rem;
+    }
+    
+    .cantidad-controls {
+        gap: 0.5rem;
+        padding: 0.4rem;
+    }
+    
+    .cantidad-controls .btn-cantidad {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+    }
+    
+    .cantidad-controls input[type="number"] {
+        width: 50px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .btn-agregar-carrito-grande {
+        font-size: 0.95rem;
+        padding: 0.9rem 1.5rem;
+    }
+    
+    .btn-seguir-comprando {
+        font-size: 0.9rem;
+        padding: 0.85rem;
+    }
+
+    .resenas-section {
+        padding: 1rem;
+    }
+
+    .resenas-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .resena-card {
+        padding: 1rem;
+    }
+    
+    .usuario-info {
+        font-size: 0.9rem;
+    }
+    
+    .usuario-info i {
+        font-size: 1.2rem;
+    }
+    
+    .resena-comentario {
+        font-size: 0.9rem;
+    }
+    
+    .resena-fecha {
+        font-size: 0.75rem;
+    }
+    
+    .toast-notification {
+        right: 5px;
+        top: 5px;
+        min-width: 250px;
+        padding: 0.8rem 1rem;
+        font-size: 0.85rem;
+        max-width: calc(100vw - 10px);
+    }
+    
+    .toast-notification i {
+        font-size: 1.2rem;
+    }
+}
+
+/* ========================================
+   ANIMACIONES
+   ======================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.producto-principal,
+.resenas-section {
+    animation: fadeIn 0.5s ease;
 }

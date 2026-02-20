@@ -1,6 +1,6 @@
 <header>    
         <h1>VGLuxeBeauty</h1>
-        <form class="buscador" action="#" method="get" > 
+        <form class="buscador" action="{% url 'productos' %}" method="get" > 
             <div class="buscador-container" >
                 <i class="bi bi-search buscador-icono" aria-hidden="true"></i>
                     
@@ -14,10 +14,44 @@
         </form >
         <nav class="menu">
             <ul>
+
                 <li><a href="{% url 'home' %}">Inicio</a></li>
                 <li><a href="{% url 'productos' %}">Productos</a></li>
-                <li><a href="nosotros.html">Nosotros</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+                <li><a href="{% url 'contacto' %}">Contacto</a></li>
+                <li><a href = "{% url 'ver_carrito' %}" class="carrito-link">
+                    <i class="bi bi-cart3"></i>
+                    <span class="carrito-contador" id="carrito-contador">0</span>
+                </a></li>
+                
+                {% if user.is_authenticated %}
+                    <li class="dropdown-menu-item">
+                        <a href="#" class="user-menu">
+                            <i class="bi bi-person-circle"></i> {{ user.username }}
+                        </a>
+                        <ul class="dropdown-submenu">
+                            <li><a href="{% url 'perfil' %}"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                            <li><a href="{% url 'mis_pedidos' %}"><i class="bi bi-bag-check"></i> Mis Pedidos</a></li>
+                            <li><a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión</a></li>
+                    <li><a href="{% url 'registro' %}"><i class="bi bi-person-plus"></i> Registrarse</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>
+
+    <script>
+        // Actualizar el contador del carrito en el header
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/carrito/contador/')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('carrito-contador').textContent = data.total_items;
+                })
+                .catch(error => console.error('Error al obtener el contador del carrito:', error));
+                    
+        });
+    </script>

@@ -3,98 +3,272 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ producto.nombre }} | VGLuxeBeauty</title>
     <link rel="stylesheet" href="{% static 'css/producto_detalle.css' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap"  rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body>
+    {% include 'partials/header.html' %}
 
-{% include 'partials/header.html' %}
+    <main class="producto-detalle-page">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="{% url 'home' %}">Inicio</a>
+                <span>/</span>
+                <a href="{% url 'productos' %}">Productos</a>
+                <span>/</span>
+                <span>{{ producto.nombre }}</span>
+            </nav>
 
-<main style="padding:40px; display:flex; gap:40px;">
+            <!-- Producto Principal -->
+            <div class="producto-principal">
+                <div class="producto-imagen-grande">
+                    {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                    {% else %}
+                    <img src="{% static 'img/placeholder.jpg' %}" alt="{{ producto.nombre }}">
+                    {% endif %}
+                </div>
 
-    <section class="seccion-producto">
-
-    <div style="flex:1;" class="producto-imagen">
-        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" style="width:100%; max-width:400px;">
-    </div>
-
-    <div style="flex:1;" class="producto-detalle">
-        <h2>{{ producto.nombre }}</h2>
-        <p style="font-size:20px; font-weight:bold;">
-            ${{ producto.precio }}
-        </p>
-
-        <p>{{ producto.descripcion }}</p>
-
-        <button class="btn-carrito" onclick="agregarCarrito('{{ producto.id }}')">
-            Agregar al carrito
-        </button>
-    </div>
-    </section>
-    <!---Seccion reseñas  -->
-    <section class="seccion-resenas">
-        <h2>Reseñas de Clientes</h2>
-
-        <div class="promedio-calificacion">
-            <div class="numero"> {{ promedio_calificacion|default:"0.0" }}</div>
-            <div class="estrellas">
-                {% if promedio_calificacion > 0 %}
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= promedio_calificacion %}★{% else %}☆{% endif %}
-                    {% endfor %}
-                {% else %}
-                    ☆☆☆☆☆
-                {% endif %}
-            </div>
-            <div class="total">Basado en {{ total_resenas }} reseñas {{ total_resenas|pluralize }}</div>
-        </div>
-
-        {% if resenas %}
-            {% for resena in resenas %}
-                <div class="resena">
-                    <div class="resena-header">
-                        <div class="avatar">{{resena.usuario.username|first|upper}}</div>
-                        <span class="nombre"> {{ resena.usuario.get_full_name|default:resena.usuario.username }} </span>
+                <div class="producto-info-principal">
+                    <span class="categoria-badge">{{ producto.categoria }}</span>
+                    <h1>{{ producto.nombre }}</h1>
+                    
+                    <!-- Rating -->
+                    <div class="producto-rating">
+                        {% if promedio_calificacion > 0 %}
+                        <div class="estrellas">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= promedio_calificacion %}
+                                <i class="bi bi-star-fill"></i>
+                                {% else %}
+                                <i class="bi bi-star"></i>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                        <span class="resena-fecha">{{ resena.fecha|date:"d F Y" }}</span>
+                        <span class="rating-numero">({{ promedio_calificacion }}/5 - {{ total_resenas }} reseñas)</span>
+                        {% else %}
+                        <span class="sin-resenas">Sin reseñas aún</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="precio-stock">
+                        <p class="precio">${{ producto.precio }}</p>
+                        {% if producto.stock > 0 %}
+                            {% if producto.stock <= 5 %}
+                            <p class="stock stock-bajo">¡Solo quedan {{ producto.stock }} unidades!</p>
+                            {% else %}
+                            <p class="stock stock-disponible">{{ producto.stock }} unidades disponibles</p>
+                            {% endif %}
+                        {% else %}
+                        <p class="stock sin-stock">Producto agotado</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="descripcion">
+                        <h3>Descripción</h3>
+                        <p>{{ producto.descripcion }}</p>
+                    </div>
+
+                    <!-- Formulario Agregar al Carrito -->
+                    <div class="comprar-container" data-max-stock="{{ producto.stock }}">
+                        {% if producto.stock > 0 %}
+                        <form method="post" action="{% url 'agregar_al_carrito' producto.id %}" class="form-agregar-carrito" id="form-agregar-detalle">
+                            {% csrf_token %}
+                            <div class="cantidad-selector">
+                                <label for="cantidad">Cantidad:</label>
+                                <div class="cantidad-controls">
+                                    <button type="button" class="btn-cantidad btn-decrementar">-</button>
+                                    <input type="number" id="cantidad" name="cantidad" value="1" min="1" max="{{ producto.stock }}" readonly>
+                                    <button type="button" class="btn-cantidad btn-incrementar">+</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-agregar-carrito-grande">
+                                <i class="bi bi-cart-plus"></i>
+                                Agregar al Carrito
+                            </button>
+                        </form>
+                        {% else %}
+                        <button class="btn-agregar-carrito-grande disabled" disabled>
+                            <i class="bi bi-x-circle"></i>
+                            Producto Agotado
+                        </button>
+                        {% endif %}
+                        
+                        <a href="{% url 'productos' %}" class="btn-seguir-comprando">
+                            <i class="bi bi-arrow-left"></i>
+                            Seguir Comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Reseñas -->
+            <div class="resenas-section">
+                <h2>
+                    <i class="bi bi-chat-square-text"></i>
+                    Reseñas de Clientes
+                </h2>
+
+                {% if resenas %}
+                <div class="resenas-lista">
+                    {% for resena in resenas %}
+                    <div class="resena-card">
+                        <div class="resena-header">
+                            <div class="usuario-info">
+                                <i class="bi bi-person-circle"></i>
+                                <span>{{ resena.usuario.username }}</span>
+                            </div>
+                            <div class="resena-rating">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= resena.calificacion %}
+                                    <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                    <i class="bi bi-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="resena-comentario">{{ resena.comentario }}</p>
+                        <span class="resena-fecha">{{ resena.fecha|date:"d/m/Y" }}</span>
                     </div>
                     {% endfor %}
+                </div>
                 {% else %}
-                <p style ="text-align: center; color: #999; margin: 30px 0;">No hay reseñas disponibles.</p>
-        {% endif %}
-        
-        {% if user.is_authenticated %}
-            <button class="btn-escribir-resena">Escribir una Reseña</button>
-        {% else %}
-            <p style="text-align:center; margin-top:30px 0;">
-                <a href="{% url 'login' %}" style="color: var(--accent-color)">Inicia sesión</a> para escribir una reseña.
-            </p>
-        {% endif %}
-    </section>
-</main>
+                <div class="sin-resenas-msg">
+                    <i class="bi bi-chat-square-text"></i>
+                    <p>Este producto aún no tiene reseñas. ¡Sé el primero en opinar!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
 
-{% include 'partials/footer.html' %}
+    {% include 'partials/footer.html' %}
 
-<script>
-function agregarCarrito(id) {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    const idNum = parseInt(id);
-    const existente = carrito.find(item => item.producto_id === idNum);
+    <!-- Notificación Toast -->
+    <div id="toast-notification" class="toast-notification">
+        <i class="bi bi-check-circle-fill"></i>
+        <span id="toast-message"></span>
+    </div>
 
-    if (existente) {
-        existente.cantidad += 1;
-    } else {
-        carrito.push({ producto_id: idNum, cantidad: 1 });
-    }
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
 
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-    alert("Producto agregado al carrito");
-}
-</script>
+        const csrftoken = getCookie('csrftoken');
 
+        // Manejar envío del formulario con AJAX
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('form-agregar-detalle');
+            const maxStock = parseInt(document.querySelector('.comprar-container').dataset.maxStock);
+            const inputCantidad = document.getElementById('cantidad');
+            const btnIncrementar = document.querySelector('.btn-incrementar');
+            const btnDecrementar = document.querySelector('.btn-decrementar');
+
+            // Botón incrementar
+            if (btnIncrementar) {
+                btnIncrementar.addEventListener('click', function() {
+                    let cantidad = parseInt(inputCantidad.value);
+                    if (cantidad < maxStock) {
+                        inputCantidad.value = cantidad + 1;
+                    }
+                });
+            }
+
+            // Botón decrementar
+            if (btnDecrementar) {
+                btnDecrementar.addEventListener('click', function() {
+                    let cantidad = parseInt(inputCantidad.value);
+                    if (cantidad > 1) {
+                        inputCantidad.value = cantidad - 1;
+                    }
+                });
+            }
+            
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    
+                    fetch(this.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            actualizarContadorCarrito(data.total_items);
+                            mostrarToast(data.message, 'success');
+                            
+                            // Resetear cantidad a 1 después de agregar
+                            inputCantidad.value = 1;
+                        } else {
+                            mostrarToast(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mostrarToast('Ocurrió un error al agregar el producto', 'error');
+                    });
+                });
+            }
+        });
+
+        function actualizarContadorCarrito(total) {
+            const contador = document.getElementById('carrito-contador');
+            if (contador) {
+                contador.textContent = total;
+                contador.style.transform = 'scale(1.5)';
+                setTimeout(() => {
+                    contador.style.transform = 'scale(1)';
+                }, 200);
+            }
+        }
+
+        function mostrarToast(mensaje, tipo) {
+            const toast = document.getElementById('toast-notification');
+            const toastMessage = document.getElementById('toast-message');
+            const icon = toast.querySelector('i');
+            
+            toastMessage.textContent = mensaje;
+            
+            if (tipo === 'success') {
+                icon.className = 'bi bi-check-circle-fill';
+                toast.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            } else {
+                icon.className = 'bi bi-exclamation-triangle-fill';
+                toast.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

@@ -18,6 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 from productos.views import home
 
 urlpatterns = [
@@ -25,6 +26,10 @@ urlpatterns = [
     path('api/', include('productos.urls')),
     path('', home, name='home'),
     path('', include('productos.urls')),
+    path('usuarios/', include('usuarios.urls')),
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='auth_login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='auth_logout'),
+    path('pedidos/', include('pedidos.urls')),
 ]
 
 if settings.DEBUG:

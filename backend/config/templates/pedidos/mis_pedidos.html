@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Pedidos | VGLuxeBeauty</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ui-utils.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex: 1;
+        }
+        .pedidos-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px 40px 20px;
+        }
+        .pedidos-container h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .pedido-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .pedido-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .pedido-header h3 {
+            margin: 0;
+            color: #333;
+            font-size: 1.3rem;
+        }
+        .pedido-header p {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .badge-pendiente { background: #fbbf24; color: #000; }
+        .badge-pagado { background: #10b981; color: white; }
+        .badge-enviado { background: #3b82f6; color: white; }
+        .badge-entregado { background: #059669; color: white; }
+        .badge-cancelado { background: #ef4444; color: white; }
+        .no-pedidos {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .no-pedidos i {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        .no-pedidos h3 {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .pedido-items h5 {
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .pedido-items p {
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .pedido-total {
+            text-align: right;
+        }
+        .pedido-total h5 {
+            color: #333;
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        .pedido-total p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'partials/header.html' %}
+    
+    <main>
+        <div class="pedidos-container">
+        <h1><i class="bi bi-bag-check-fill"></i> Mis Pedidos</h1>
+        
+        {% if pedidos %}
+            {% for pedido in pedidos %}
+            <div class="pedido-card">
+                <div class="pedido-header">
+                    <div>
+                        <h3>Pedido #{{ pedido.numero_pedido }}</h3>
+                        <p>{{ pedido.creado|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <div>
+                        <span class="badge badge-{{ pedido.estado }}">{{ pedido.get_estado_display }}</span>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-8 pedido-items">
+                        <h5>Productos ({{ pedido.total_items }})</h5>
+                        {% for item in pedido.items.all %}
+                        <p>{{ item.cantidad }}x {{ item.nombre_producto }} - ${{ item.subtotal|floatformat:0 }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-4 pedido-total">
+                        <h5>Total: ${{ pedido.total }}</h5>
+                        <p>{{ pedido.get_metodo_pago_display }}</p>
+                        <a href="{% url 'detalle_pedido' pedido.id %}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-eye"></i> Ver Detalles
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-pedidos">
+                <i class="bi bi-bag-x"></i>
+                <h3>No tienes pedidos aún</h3>
+                <a href="{% url 'productos' %}" class="btn btn-primary"  >Explorar Productos</a>
+            </div>
+        {% endif %}
+        </div>
+    </main>
+
+    {% include 'partials/footer.html' %}
+
+    <!-- Scripts UX/UI -->
+    <script src="{% static 'js/notifications.js' %}"></script>
+    <script src="{% static 'js/ui-utils.js' %}"></script>
+</body>
+</html>

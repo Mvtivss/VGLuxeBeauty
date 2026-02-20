@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Producto, Testimonio
-from .models import Resena
+from .models import Producto, Testimonio, Resena, Carrito, ItemCarrito
 
 # Register your models here.
 
@@ -46,3 +45,22 @@ class TestimonioAdmin(admin.ModelAdmin):
             'fields': ('destacado', 'activo', 'fecha')
         }),
     )
+
+class ItemCarritoInline(admin.TabularInline):
+    model = ItemCarrito
+    extra = 0
+    readonly_fields = ['subtotal']
+
+@admin.register(Carrito)
+class CarritoAdmin(admin.ModelAdmin):
+    list_display = ['id', 'usuario', 'session_key', 'total_items', 'total_precio', 'actualizado']
+    list_filter = ['creado', 'actualizado']
+    search_fields = ['usuario__username', 'session_key']
+    inlines = [ItemCarritoInline]
+    readonly_fields = ['creado', 'actualizado']
+
+@admin.register(ItemCarrito)
+class ItemCarritoAdmin(admin.ModelAdmin):
+    list_display = ['id', 'carrito', 'producto', 'cantidad', 'subtotal', 'fecha_agregado']
+    list_filter = ['fecha_agregado']
+    search_fields = ['producto__nombre', 'carrito__usuario__username']
